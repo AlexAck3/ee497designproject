@@ -1,0 +1,6 @@
+Theoretically, we can do this over the socket library
+
+Not much change from projects we have done already.
+
+run "sudo hciconfig hci0 piscan" on each pi to enable python bluethooth comms
+
