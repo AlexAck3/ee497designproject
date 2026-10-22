@@ -1,7 +1,7 @@
 import socket
 from time import sleep
 import sys
-from PyQt6.QtWidgets import QApplication, QWidget, QSlider, QLabel, QFormLayout
+from PyQt6.QtWidgets import QApplication, QWidget, QSlider, QHBoxLayout, QLabel, QVBoxLayout
 from PyQt6.QtCore import Qt
 
 SERVER_ADDRESS = "2C:CF:67:95:AC:52"     # This NEEDS to be the server pi's mac address
@@ -16,12 +16,42 @@ class MainWindow(QWidget):
 
         self.setWindowTitle('PyQt QSlider')
         self.setMinimumWidth(200)
+        self.resize(400,300)
 
         # create a grid layout
-        layout = QFormLayout()
-        self.setLayout(layout)
+        # main layout: sliders row on top, label below
+        main_layout = QVBoxLayout()
+        self.setLayout(main_layout)
 
-        slider = QSlider(Qt.Orientation.Vertical, self)
+        # horizontal layout for side-by-side sliders
+        slider_layout = QHBoxLayout()
+        main_layout.addLayout(slider_layout)
+
+
+        slider_low = QSlider(Qt.Orientation.Vertical, self)
+        slider_low_mid = QSlider(Qt.Orientation.Vertical, self)
+        slider_mid = QSlider(Qt.Orientation.Vertical, self)
+        slider_high_mid = QSlider(Qt.Orientation.Vertical, self)
+        slider_high = QSlider(Qt.Orientation.Vertical, self)
+
+        # Initialize Sliders
+        self.slider_init(slider_low, slider_layout)
+        self.slider_init(slider_low_mid, slider_layout)
+        self.slider_init(slider_mid, slider_layout)
+        self.slider_init(slider_high_mid, slider_layout)
+        self.slider_init(slider_high, slider_layout)
+        
+
+        self.result_label = QLabel('', self)
+        main_layout.addWidget(self.result_label)
+        
+        # show the window
+        self.show()
+
+    def update(self, value):
+        self.result_label.setText(f'Current Value: {value}')
+
+    def slider_init(self, slider: QSlider, slider_layout: QHBoxLayout):
         slider.setRange(0, 100)
         slider.setValue(50)
         slider.setSingleStep(5)
@@ -29,18 +59,7 @@ class MainWindow(QWidget):
         slider.setTickPosition(QSlider.TickPosition.TicksAbove)
 
         slider.valueChanged.connect(self.update)
-
-        self.result_label = QLabel('', self)
-
-        layout.addRow(slider)
-        layout.addRow(self.result_label)
-
-        # show the window
-        self.show()
-
-    def update(self, value):
-        self.result_label.setText(f'Current Value: {value}')
-
+        slider_layout.addWidget(slider)
 try:
     if __name__ == '__main__':
         app = QApplication(sys.argv)
