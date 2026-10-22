@@ -21,7 +21,7 @@ class MainWindow(QWidget):
         layout = QFormLayout()
         self.setLayout(layout)
 
-        slider = QSlider(Qt.Orientation.Horizontal, self)
+        slider = QSlider(Qt.Orientation.Vertical, self)
         slider.setRange(0, 100)
         slider.setValue(50)
         slider.setSingleStep(5)
