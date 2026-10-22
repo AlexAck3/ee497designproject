@@ -7,25 +7,16 @@ PORT = 1                # Must matcht the server, 1-30
 # Bluethooth socket
 conn = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
 
+class Brandon_is_gui:
+    def __init__(self):
+        slider = QSlider(Qt.Orientation.Vertical, self)
+    def send_slider_data(self):
+        pass
+
 try:
-    print(f"Finding MAC Address {SERVER_ADDRESS} on port {PORT}...")
-    conn.connect((SERVER_ADDRESS, PORT))
-    print(f"Connection Success!!!")
+    if __name__ == "__main__":
+        pass
 
-    # Sends dummy data for now
-    while True:
-        msg = "Test Passed!"
-        conn.send(msg.encode("ascii"))
-
-        data = conn.recv(1024)
-        if not data:
-            print(f"Connection Terminated from {SERVER_ADDRESS}")
-            break
-        
-        msg = data.decode("ascii")
-        print(f"Recieved MSG:\n{msg}")
-
-        sleep(2)        # Wait a couple seconds
         
 
 except Exception as e:
