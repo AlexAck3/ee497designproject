@@ -1,7 +1,7 @@
 import socket
 from time import sleep
 
-SERVER_ADDRESS = ""     # This NEEDS to be the server pi's mac address
+SERVER_ADDRESS = "2C:CF:67:95:AC:52"     # This NEEDS to be the server pi's mac address
 PORT = 1                # Must matcht the server, 1-30
 
 # Bluethooth socket
