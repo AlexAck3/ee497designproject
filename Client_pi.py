@@ -51,9 +51,9 @@ class MainWindow(QWidget):
         # show the window
         self.show()
 
-    def update(self, value, slider_number):
+    def send_val(self, value, slider_number):
         self.result_label.setText(f'Current slider: {slider_number} current Value: {value}')
-        msg = f"{slider_number},{value}"
+        msg = f"{slider_number},{value}\n"
         conn.send(msg.encode('ascii'))
 
         data = conn.recv(1024)
@@ -73,10 +73,11 @@ class MainWindow(QWidget):
         slider.setPageStep(10)
         slider.setTickPosition(QSlider.TickPosition.TicksAbove)
 
-        slider.valueChanged.connect(lambda value: self.update(value, i)) # .setText(f'Slider {n + 1}: {value}')
+        slider.valueChanged.connect(lambda value: self.send_val(value, i)) # .setText(f'Slider {n + 1}: {value}')
         slider_layout.addWidget(slider)
 try:
     if __name__ == '__main__':
+        conn.connect((SERVER_ADDRESS, PORT))
         app = QApplication(sys.argv)
         window = MainWindow()
         sys.exit(app.exec()) 
