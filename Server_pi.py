@@ -1,6 +1,6 @@
 import socket
 
-SERVER_ADDRESS = ""     # Keep empty -> allows listening to all devices
+SERVER_ADDRESS = "2C:CF:67:95:AC:52"     # Keep empty -> allows listening to all devices
 PORT = 1                # 1-30 are available
 
 # Bluethooth socket
