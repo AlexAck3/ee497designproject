@@ -33,6 +33,8 @@ class MainWindow(QWidget):
         slider_mid = QSlider(Qt.Orientation.Vertical, self)
         slider_high_mid = QSlider(Qt.Orientation.Vertical, self)
         slider_high = QSlider(Qt.Orientation.Vertical, self)
+        volume_gap = QLabel('', self)
+        slider_volume = QSlider(Qt.Orientation.Vertical, self)
 
         # Initialize Sliders
         self.slider_init(slider_low, slider_layout,0 )
@@ -40,6 +42,7 @@ class MainWindow(QWidget):
         self.slider_init(slider_mid, slider_layout, 2)
         self.slider_init(slider_high_mid, slider_layout, 3)
         self.slider_init(slider_high, slider_layout, 4)
+        self.slider_init(slider_volume, slider_layout, 5)
         
 
         self.result_label = QLabel('', self)
@@ -50,6 +53,17 @@ class MainWindow(QWidget):
 
     def update(self, value, slider_number):
         self.result_label.setText(f'Current slider: {slider_number} current Value: {value}')
+        msg = f"{slider_number},{value}"
+        conn.send(msg.encode('ascii'))
+
+        data = conn.recv(1024)
+        if not data:
+                    print("no connection")
+        recieved = data.decode('ascii')
+        print(f"recievedd message \n{recieved}")
+        
+        
+
         
 
     def slider_init(self, slider: QSlider, slider_layout: QHBoxLayout, i):
