@@ -35,11 +35,11 @@ class MainWindow(QWidget):
         slider_high = QSlider(Qt.Orientation.Vertical, self)
 
         # Initialize Sliders
-        self.slider_init(slider_low, slider_layout)
-        self.slider_init(slider_low_mid, slider_layout)
-        self.slider_init(slider_mid, slider_layout)
-        self.slider_init(slider_high_mid, slider_layout)
-        self.slider_init(slider_high, slider_layout)
+        self.slider_init(slider_low, slider_layout,0 )
+        self.slider_init(slider_low_mid, slider_layout, 1)
+        self.slider_init(slider_mid, slider_layout, 2)
+        self.slider_init(slider_high_mid, slider_layout, 3)
+        self.slider_init(slider_high, slider_layout, 4)
         
 
         self.result_label = QLabel('', self)
@@ -48,17 +48,18 @@ class MainWindow(QWidget):
         # show the window
         self.show()
 
-    def update(self, value):
-        self.result_label.setText(f'Current Value: {value}')
+    def update(self, value, slider_number):
+        self.result_label.setText(f'Current slider: {slider_number} current Value: {value}')
+        
 
-    def slider_init(self, slider: QSlider, slider_layout: QHBoxLayout):
+    def slider_init(self, slider: QSlider, slider_layout: QHBoxLayout, i):
         slider.setRange(0, 100)
         slider.setValue(50)
         slider.setSingleStep(5)
         slider.setPageStep(10)
         slider.setTickPosition(QSlider.TickPosition.TicksAbove)
 
-        slider.valueChanged.connect(self.update)
+        slider.valueChanged.connect(lambda: self.update(i)) # .setText(f'Slider {n + 1}: {value}')
         slider_layout.addWidget(slider)
 try:
     if __name__ == '__main__':
