@@ -59,7 +59,7 @@ class MainWindow(QWidget):
         slider.setPageStep(10)
         slider.setTickPosition(QSlider.TickPosition.TicksAbove)
 
-        slider.valueChanged.connect(lambda: self.update(i)) # .setText(f'Slider {n + 1}: {value}')
+        slider.valueChanged.connect(lambda value: self.update(value, i)) # .setText(f'Slider {n + 1}: {value}')
         slider_layout.addWidget(slider)
 try:
     if __name__ == '__main__':
