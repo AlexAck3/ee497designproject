@@ -411,6 +411,8 @@ class MainWindow(QWidget):
         msg = f"{slider_number},{value}\n"
         if slider_number != 5:      # IF the slider is not the volume knob
             value = int(round((value+15)/30, 2)*100)
+            if value < 0:
+                value = 0
         try:
             conn.send(msg.encode('ascii'))
             data = conn.recv(1024)
