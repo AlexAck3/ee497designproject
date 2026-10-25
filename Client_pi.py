@@ -409,6 +409,8 @@ class MainWindow(QWidget):
         self.tx_lamp.set_on(True)
         self.tx_lamp.repaint()
         msg = f"{slider_number},{value}\n"
+        if slider_number != 5:      # IF the slider is not the volume knob
+            value = int(round((value+15)/30, 2)*100)
         try:
             conn.send(msg.encode('ascii'))
             data = conn.recv(1024)
