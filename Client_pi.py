@@ -337,13 +337,6 @@ class MainWindow(QWidget):
         header.addLayout(power_col)
 
         header.addStretch(1)
-        badge = QLabel("WIRELESS EQ")
-        badge.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        badge.setStyleSheet(f"background-color: {ORANGE}; color: #ffffff; border-radius: 3px; "
-                            "padding: 5px 16px; font-family: Helvetica, Arial, sans-serif; "
-                            "font-size: 15px; font-weight: bold; letter-spacing: 2px;")
-        header.addWidget(badge)
-        header.addStretch(1)
 
         link_col = QVBoxLayout()
         self.link_lamp = Lamp("#31e04a")
@@ -408,11 +401,11 @@ class MainWindow(QWidget):
         self.status_label.setText(f"Current slider: {slider_number}   Value: {value}")
         self.tx_lamp.set_on(True)
         self.tx_lamp.repaint()
-        msg = f"{slider_number},{value}\n"
         if slider_number != 5:      # IF the slider is not the volume knob
             value = int(round((value+15)/30, 2)*100)
             if value < 0:
                 value = 0
+        msg = f"{slider_number},{value}\n"
         try:
             conn.send(msg.encode('ascii'))
             data = conn.recv(1024)
