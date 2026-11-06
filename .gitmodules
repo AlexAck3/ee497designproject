@@ -1,0 +1,6 @@
+[submodule "eq_plugin/modules/JUCE"]
+	path = eq_plugin/modules/JUCE
+	url = https://github.com/juce-framework/JUCE.git
+[submodule "eq_plugin/modules/cmake-includes"]
+	path = eq_plugin/modules/cmake-includes
+	url = https://github.com/sudara/cmake-includes.git
