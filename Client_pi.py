@@ -6,7 +6,7 @@ from PyQt6.QtCore import Qt, pyqtSignal, QRectF, QPointF, QTimer
 from PyQt6.QtGui import (QPainter, QColor, QPen, QFont, QBrush,
                          QLinearGradient, QRadialGradient)
 
-SERVER_ADDRESS = "2C:CF:67:95:AC:52"     # This NEEDS to be the server pi's mac address
+SERVER_ADDRESS = "2C:CF:67:95:AC:7A"     # This NEEDS to be the server pi's mac address
 PORT = 1                # Must match the server, 1-30
 
 # Bluetooth socket
@@ -377,7 +377,7 @@ class MainWindow(QWidget):
         self.status_label = text_label("", 10, "#6a6a6a", bold=False, mono=True)
         main.addWidget(self.status_label)
 
-        self.show()
+        self.showFullScreen()
 
     def make_column(self, control, name, index, unit):
         col = QVBoxLayout()
