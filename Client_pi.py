@@ -1,16 +1,16 @@
-import socket
 import sys
 import math
 from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QHBoxLayout
-from PyQt6.QtCore import Qt, pyqtSignal, QRectF, QPointF, QTimer
+from PyQt6.QtCore import Qt, pyqtSignal, QRectF, QPointF, QTimer, QEventLoop
+from PyQt6.QtBluetooth import QBluetoothSocket, QBluetoothServiceInfo, QBluetoothAddress
 from PyQt6.QtGui import (QPainter, QColor, QPen, QFont, QBrush,
                          QLinearGradient, QRadialGradient)
 
 SERVER_ADDRESS = "2C:CF:67:95:AC:7A"     # This NEEDS to be the server pi's mac address
 PORT = 1                # Must match the server, 1-30
 
-# Bluetooth socket
-conn = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
+# Bluetooth socket (created in the main block below, once QApplication exists)
+conn = None
 
 # ---------------------------------------------------------------- styling
 MARGIN = 20                  # shared top/bottom margin so the dB scale lines up with the faders
@@ -407,8 +407,15 @@ class MainWindow(QWidget):
                 value = 0
         msg = f"{slider_number},{value}\n"
         try:
-            conn.send(msg.encode('ascii'))
-            data = conn.recv(1024)
+            if conn.write(msg.encode('ascii')) == -1:
+                raise OSError(conn.errorString())
+            # wait for the server's reply (replaces blocking recv), 2 s timeout
+            loop = QEventLoop()
+            conn.readyRead.connect(loop.quit)
+            QTimer.singleShot(2000, loop.quit)
+            loop.exec(QEventLoop.ProcessEventsFlag.ExcludeUserInputEvents)
+            conn.readyRead.disconnect(loop.quit)
+            data = bytes(conn.readAll())
             if not data:
                 print("no connection")
                 self.link_lamp.set_on(False)
@@ -429,8 +436,16 @@ class MainWindow(QWidget):
 
 try:
     if __name__ == '__main__':
-        conn.connect((SERVER_ADDRESS, PORT))
         app = QApplication(sys.argv)
+        conn = QBluetoothSocket(QBluetoothServiceInfo.Protocol.RfcommProtocol)
+        # wait for the connection (replaces blocking connect)
+        loop = QEventLoop()
+        conn.connected.connect(loop.quit)
+        conn.errorOccurred.connect(lambda err: loop.quit())
+        conn.connectToService(QBluetoothAddress(SERVER_ADDRESS), PORT)
+        loop.exec()
+        if conn.state() != QBluetoothSocket.SocketState.ConnectedState:
+            raise OSError(conn.errorString())
         window = MainWindow()
         sys.exit(app.exec())
 
@@ -438,5 +453,6 @@ except Exception as e:
     print(f"ERROR [Failed Connection]:\n{e}\n")
 
 finally:
-    conn.close()
+    if conn is not None:
+        conn.close()
     print("Sockets closed, shutting down...")
