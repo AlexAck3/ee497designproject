@@ -65,8 +65,8 @@ class BTServer:
             raw_gain= float(msg.split(",")[1])
             gain = ((raw_gain / 100) * 24) - 12
 
-            result = RPR.TrackFX_SetEQParam(self.track.id, 0, 2, band, 1, gain, False)
-            print(f"EQ Output: {result}")
+            eq_result = RPR.TrackFX_SetEQParam(self.track.id, 0, 2, band, 1, gain, False)
+            volume_result = RPR.SetMediaTrackInfo_Value(self.track.id, "D_VOL",gain)
 
             fb = "ACK"
             self.conn.write(fb.encode("ascii"))
