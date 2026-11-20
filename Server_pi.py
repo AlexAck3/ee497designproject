@@ -62,9 +62,10 @@ class BTServer:
             print(f"Recieved MSG:\n{msg}")
 
             band = int(msg.split(",")[0])
-            gain = float(msg.split(",")[1])
+            raw_gain= float(msg.split(",")[1])
+            gain = ((raw_gain / 100) * 24) - 12
 
-            result = RPR.TrackFX_SetEQParam(self.track.id, 0, 2, 0, 1, gain, False)
+            result = RPR.TrackFX_SetEQParam(self.track.id, 0, 2, band, 1, gain, False)
             print(f"EQ Output: {result}")
 
             fb = "ACK"
